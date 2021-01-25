@@ -23,7 +23,7 @@ urlpatterns = [
     path('api/v1/posts/', views.get_all_posts),
     path('api/v1/posts/<int:id>/', views.get_post),
 
-    path('api/v1/articles/', articles.article_view),
+    path('api/v1/articles/', articles.ArticleAPIView.as_view()),
     path('api/v1/articles/<int:id>/', articles.article_detail),
 
 ]
