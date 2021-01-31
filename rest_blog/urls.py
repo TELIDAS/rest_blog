@@ -21,6 +21,9 @@ from blog_app.views import CommentViewSet, CommentViewSetDetail
 from blog_app_2 import views as articles
 from blog_app import views
 from lesson3 import views as news
+from knox import views as knox_views
+from blog_app.views import LoginAPI
+from django.urls import path
 
 router = DefaultRouter()
 router.register('', CommentViewSet, basename='comment')
@@ -28,8 +31,15 @@ router.register('', CommentViewSetDetail, basename='comment_detail')
 
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('api/login/', LoginAPI.as_view(), name='login'),
+    path('api/logout/', knox_views.LogoutView.as_view(), name='logout'),
+    path('api/logoutall/', knox_views.LogoutAllView.as_view(), name='logoutall'),
+
+    path('api/register/', views.RegisterAPI.as_view(), name='register'),
 
     path('api/v1/posts-api/', views.PostAPIView.as_view()),
     path('api/v1/posts-api/<int:id>/', views.PostAPIViewDetail.as_view()),

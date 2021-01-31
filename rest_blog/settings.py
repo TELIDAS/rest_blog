@@ -43,9 +43,17 @@ INSTALLED_APPS = [
     'blog_app',
     'blog_app_2',
     'lesson3',
-    # 'rest_framework.authtoken',
+    'rest_framework.authtoken',
+    'knox',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'knox.auth.TokenAuthentication',
+    ]
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
