@@ -8,7 +8,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = 'id title images description date_added comments'.split()
+        fields = 'id title description date_added comments'.split()
 
     def get_comments(self, obj):
         comments = Comment.objects.filter(post=obj)

@@ -1,14 +1,8 @@
-from django.http import HttpResponse
-from django.shortcuts import render
-
-# Create your views here.
-from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework import status, viewsets, mixins
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from blog_app.models import Post
-from blog_app.serializers import PostSerializer
+from blog_app.models import Post, Comment
+from blog_app.serializers import PostSerializer, CommentSerializer
 
 
 class PostAPIView(APIView):
@@ -30,15 +24,13 @@ class PostAPIView(APIView):
                         status=status.HTTP_201_CREATED)
 
 
-
 class PostAPIViewDetail(APIView):
-    allow_methods = ['DELETE', 'PUT']
+    allow_methods = ['DELETE', 'PUT', 'GET']
     serializer_class = PostSerializer
 
     def get(self, request, id):
         post = Post.objects.get(id=id)
         return Response(data=self.serializer_class(post).data)
-
 
     def delete(self, request, *args, **kwargs):
         post = Post.objects.get(id=id)
@@ -46,7 +38,6 @@ class PostAPIViewDetail(APIView):
         posts = Post.objects.all()
         return Response(data=self.serializer_class(posts).data,
                         status=status.HTTP_200_OK)
-
 
     def put(self, request, id):
         post = Post.objects.get(id=id)
@@ -60,20 +51,18 @@ class PostAPIViewDetail(APIView):
                         status=status.HTTP_200_OK)
 
 
-@api_view(['GET'])
-def get_all_posts(request):
-    posts = Post.objects.all()
-    data = PostSerializer(posts,
-                          many=True).data
-    return Response(data=data)
+class CommentViewSet(viewsets.GenericViewSet,
+                     mixins.ListModelMixin,
+                     mixins.CreateModelMixin):
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
+
+class CommentViewSetDetail(viewsets.GenericViewSet,
+                           mixins.RetrieveModelMixin,
+                           mixins.UpdateModelMixin,
+                           mixins.DestroyModelMixin):
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
 
 
-@api_view(['GET'])
-def get_post(request, id):
-    try:
-        posts = Post.objects.get(id=id)
-    except Post.DoesNotExist:
-        return Response(data={'result': 'post does not exist, baby'},
-                        status=status.HTTP_404_NOT_FOUND)
-    data = PostSerializer(posts).data
-    return Response(data=data, status=status.HTTP_200_OK)
+

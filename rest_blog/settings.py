@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'blog_app',
-    'blog_app_2'
+    'blog_app_2',
+    'lesson3',
+    # 'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
