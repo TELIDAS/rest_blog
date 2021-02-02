@@ -16,14 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-
 from blog_app.views import CommentViewSet, CommentViewSetDetail
 from blog_app_2 import views as articles
 from blog_app import views
 from lesson3 import views as news
 from knox import views as knox_views
 from blog_app.views import LoginAPI
-from django.urls import path
+from lesson4 import views as lesson4
 
 router = DefaultRouter()
 router.register('', CommentViewSet, basename='comment')
@@ -34,6 +33,8 @@ router.register('', CommentViewSetDetail, basename='comment_detail')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/register/', lesson4.RegisterAPIView.as_view()),
+    path('api/v1/confirm/', lesson4.ConfirmAPIView.as_view()),
 
     path('api/login/', LoginAPI.as_view(), name='login'),
     path('api/logout/', knox_views.LogoutView.as_view(), name='logout'),
